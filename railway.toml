@@ -1,0 +1,14 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+numReplicas = 1
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+startCommand = "celery -A config.celery_app worker -Q ml_tasks --loglevel=info --concurrency=2 --time-limit=2700 --soft-time-limit=1800"
+
+[[services]]
+name = "ml-worker"
+startCommand = "celery -A config.celery_app worker -Q ml_tasks --loglevel=info --concurrency=2 --time-limit=2700 --soft-time-limit=1800"
+numReplicas = 1
